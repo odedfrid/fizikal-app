@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0d0d0d">
+<title>ארלוזורוב 97</title>
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #0d0d0d;
+    --surface:  #1a1a1a;
+    --surface2: #242424;
+    --accent:   #c8f000;
+    --accent2:  #a0c800;
+    --text:     #f0f0f0;
+    --muted:    #888;
+    --danger:   #ff4d4d;
+    --warn:     #ffa500;
+    --success:  #4caf50;
+    --radius:   16px;
+    --font:     'Heebo', sans-serif;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+
+  /* ── Login Screen ── */
+  #loginScreen {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 24px;
+    background: radial-gradient(ellipse at 50% 0%, #1e2800 0%, #0d0d0d 60%);
+  }
+
+  .logo-wrap {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .logo-mark {
+    width: 72px; height: 72px;
+    background: var(--accent);
+    border-radius: 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px; font-weight: 900;
+    color: #0d0d0d;
+    margin: 0 auto 16px;
+    box-shadow: 0 0 40px rgba(200,240,0,0.3);
+  }
+
+  .logo-title {
+    font-size: 22px; font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.5px;
+  }
+
+  .logo-sub {
+    font-size: 13px; color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .login-card {
+    width: 100%; max-width: 360px;
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    border: 1px solid #2a2a2a;
+  }
+
+  .login-card h2 {
+    font-size: 18px; font-weight: 700;
+    margin-bottom: 24px;
+  }
+
+  .field {
+    margin-bottom: 16px;
+  }
+
+  .field label {
+    display: block;
+    font-size: 12px; font-weight: 500;
+    color: var(--muted);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .field input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 14px 16px;
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s;
+    direction: ltr;
+    text-align: right;
+  }
+
+  .field input:focus { border-color: var(--accent); }
+
+  .btn-primary {
+    width: 100%;
+    background: var(--accent);
+    color: #0d0d0d;
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-family: var(--font);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary:active { transform: scale(0.97); background: var(--accent2); }
+
+  .btn-primary.loading { opacity: 0.7; pointer-events: none; }
+
+  /* ── Main App ── */
+  #app { display: none; flex-direction: column; min-height: 100dvh; }
+
+  /* Header */
+  .app-header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(13,13,13,0.9);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 16px 20px 0;
+    border-bottom: 1px solid #1e1e1e;
+  }
+
+  .header-top {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .header-logo {
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .header-logo-mark {
+    width: 34px; height: 34px;
+    background: var(--accent);
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 900; color: #0d0d0d;
+  }
+
+  .header-title {
+    font-size: 16px; font-weight: 700;
+  }
+
+  .header-user {
+    font-size: 12px; color: var(--muted);
+  }
+
+  .logout-btn {
+    background: none; border: 1px solid #333;
+    border-radius: 8px; padding: 6px 12px;
+    color: var(--muted); font-size: 12px;
+    font-family: var(--font); cursor: pointer;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex; gap: 0;
+    border-bottom: none;
+  }
+
+  .tab {
+    flex: 1; text-align: center;
+    padding: 12px 0 10px;
+    font-size: 13px; font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+
+  .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* Content */
+  .app-content {
+    flex: 1;
+    padding: 20px 16px;
+    overflow-y: auto;
+  }
+
+  /* Date Strip */
+  .date-strip {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    margin-bottom: 20px;
+    scrollbar-width: none;
+  }
+
+  .date-strip::-webkit-scrollbar { display: none; }
+
+  .date-pill {
+    flex-shrink: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    width: 56px; min-height: 64px;
+    background: var(--surface);
+    border-radius: 14px;
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 8px 4px;
+  }
+
+  .date-pill.active {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .date-pill.active .day-name,
+  .date-pill.active .day-num { color: #0d0d0d; }
+
+  .day-name {
+    font-size: 10px; font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  .day-num {
+    font-size: 22px; font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  /* Class Cards */
+  .classes-list {
+    display: flex; flex-direction: column; gap: 12px;
+  }
+
+  .class-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 16px;
+    border: 1px solid #222;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .class-card::before {
+    content: '';
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: transparent;
+    transition: background 0.2s;
+  }
+
+  .class-card.status-open::before    { background: var(--accent); }
+  .class-card.status-registered::before { background: var(--success); }
+  .class-card.status-full::before    { background: var(--danger); }
+  .class-card.status-waiting::before { background: var(--warn); }
+  .class-card.status-soon::before    { background: var(--muted); }
+
+  .card-top {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 10px;
+  }
+
+  .class-name {
+    font-size: 17px; font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .status-badge {
+    font-size: 11px; font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-right: 8px;
+  }
+
+  .badge-open     { background: rgba(200,240,0,0.15); color: var(--accent); }
+  .badge-registered { background: rgba(76,175,80,0.15); color: var(--success); }
+  .badge-full     { background: rgba(255,77,77,0.15); color: var(--danger); }
+  .badge-waiting  { background: rgba(255,165,0,0.15); color: var(--warn); }
+  .badge-soon     { background: rgba(136,136,136,0.12); color: var(--muted); }
+
+  .card-meta {
+    display: flex; gap: 16px;
+    font-size: 13px; color: var(--muted);
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .meta-item {
+    display: flex; align-items: center; gap: 4px;
+  }
+
+  .capacity-bar {
+    height: 4px;
+    background: #2a2a2a;
+    border-radius: 2px;
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+
+  .capacity-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .fill-low  { background: var(--accent); }
+  .fill-mid  { background: var(--warn); }
+  .fill-high { background: var(--danger); }
+
+  .card-actions {
+    display: flex; gap: 8px;
+  }
+
+  .btn-register {
+    flex: 1;
+    background: var(--accent);
+    color: #0d0d0d;
+    border: none; border-radius: 10px;
+    padding: 12px;
+    font-family: var(--font);
+    font-size: 14px; font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-register:active { transform: scale(0.97); }
+  .btn-register:disabled {
+    background: #2a2a2a; color: var(--muted); cursor: default;
+  }
+
+  .btn-watch {
+    background: var(--surface2);
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 18px;
+  }
+
+  .btn-watch:active { transform: scale(0.95); }
+  .btn-watch.active { background: rgba(200,240,0,0.1); border-color: var(--accent); }
+
+  /* Watchlist Tab */
+  .watchlist-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+  }
+
+  .watchlist-empty .empty-icon {
+    font-size: 48px; margin-bottom: 16px;
+  }
+
+  .watchlist-empty p { font-size: 15px; line-height: 1.5; }
+
+  .watch-item {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 16px;
+    border: 1px solid #222;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .watch-info { flex: 1; }
+
+  .watch-name {
+    font-size: 16px; font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .watch-meta {
+    font-size: 13px; color: var(--muted);
+  }
+
+  .watch-result {
+    font-size: 12px;
+    margin-top: 6px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    background: var(--surface2);
+    display: inline-block;
+  }
+
+  .recurring-badge {
+    font-size: 10px; font-weight: 600;
+    color: var(--accent);
+    background: rgba(200,240,0,0.1);
+    padding: 2px 8px; border-radius: 6px;
+    margin-right: 6px;
+  }
+
+  .btn-remove {
+    background: none; border: none;
+    color: var(--danger); font-size: 20px;
+    cursor: pointer; padding: 4px;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+
+  .btn-remove:active { opacity: 1; }
+
+  /* Toast */
+  #toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: #1e1e1e; color: var(--text);
+    padding: 14px 24px; border-radius: 12px;
+    font-size: 14px; font-weight: 500;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    z-index: 999; white-space: nowrap;
+    border: 1px solid #2a2a2a;
+  }
+
+  #toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(8px);
+    z-index: 200;
+    display: flex; align-items: flex-end;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.2s;
+  }
+
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+  .modal-sheet {
+    width: 100%;
+    background: var(--surface);
+    border-radius: 24px 24px 0 0;
+    padding: 24px 20px 40px;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.34,1.2,0.64,1);
+  }
+
+  .modal-overlay.open .modal-sheet {
+    transform: translateY(0);
+  }
+
+  .modal-handle {
+    width: 36px; height: 4px;
+    background: #444; border-radius: 2px;
+    margin: 0 auto 20px;
+  }
+
+  .modal-title {
+    font-size: 20px; font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .modal-sub {
+    font-size: 14px; color: var(--muted);
+    margin-bottom: 24px;
+  }
+
+  .modal-option {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px;
+    background: var(--surface2);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: all 0.15s;
+  }
+
+  .modal-option:active { transform: scale(0.98); }
+  .modal-option.selected { border-color: var(--accent); background: rgba(200,240,0,0.05); }
+
+  .option-label { font-size: 15px; font-weight: 600; }
+  .option-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  .checkmark {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 2px solid #444;
+    display: flex; align-items: center; justify-content: center;
+    color: transparent;
+    transition: all 0.15s;
+  }
+
+  .modal-option.selected .checkmark {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0d0d0d;
+  }
+
+  .btn-confirm {
+    width: 100%;
+    background: var(--accent);
+    color: #0d0d0d;
+    border: none; border-radius: 14px;
+    padding: 18px;
+    font-family: var(--font);
+    font-size: 16px; font-weight: 700;
+    cursor: pointer;
+    margin-top: 16px;
+    transition: all 0.2s;
+  }
+
+  .btn-confirm:active { transform: scale(0.97); }
+
+  /* Loading */
+  .spinner {
+    width: 40px; height: 40px;
+    border: 3px solid #2a2a2a;
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin: 60px auto;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading-text {
+    text-align: center; color: var(--muted);
+    font-size: 14px; margin-top: -40px;
+  }
+
+  /* Section title */
+  .section-title {
+    font-size: 13px; font-weight: 600;
+    color: var(--muted); text-transform: uppercase;
+    letter-spacing: 0.8px; margin-bottom: 12px;
+  }
+
+  .error-msg {
+    background: rgba(255,77,77,0.1);
+    border: 1px solid rgba(255,77,77,0.3);
+    border-radius: 10px; padding: 14px 16px;
+    font-size: 14px; color: var(--danger);
+    margin-bottom: 16px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ LOGIN SCREEN ═══ -->
+<div id="loginScreen">
+  <div class="logo-wrap">
+    <div class="logo-mark">א</div>
+    <div class="logo-title">ארלוזורוב 97</div>
+    <div class="logo-sub">הקאנטרי הקהילתי במרכז</div>
+  </div>
+
+  <div class="login-card">
+    <h2>כניסה</h2>
+    <div id="loginError" class="error-msg" style="display:none"></div>
+
+    <div class="field">
+      <label>שם משתמש (טלפון / אימייל)</label>
+      <input type="text" id="username" placeholder="050xxxxxxx" autocomplete="username">
+    </div>
+    <div class="field">
+      <label>סיסמה</label>
+      <input type="password" id="password" autocomplete="current-password">
+    </div>
+
+    <div class="field">
+      <label>כתובת השרת (Apps Script URL)</label>
+      <input type="url" id="serverUrl" placeholder="https://script.google.com/macros/s/..." dir="ltr" style="text-align:left; font-size:12px;">
+    </div>
+
+    <button class="btn-primary" id="loginBtn" onclick="doLogin()">כניסה</button>
+  </div>
+</div>
+
+<!-- ═══ MAIN APP ═══ -->
+<div id="app">
+  <div class="app-header">
+    <div class="header-top">
+      <div class="header-logo">
+        <div class="header-logo-mark">א</div>
+        <div>
+          <div class="header-title">ארלוזורוב 97</div>
+          <div class="header-user" id="headerUser"></div>
+        </div>
+      </div>
+      <button class="logout-btn" onclick="doLogout()">יציאה</button>
+    </div>
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('calendar')" id="tab-calendar">לוח שיעורים</div>
+      <div class="tab" onclick="switchTab('watchlist')" id="tab-watchlist">רשימת המתנה שלי</div>
+    </div>
+  </div>
+
+  <div class="app-content" id="appContent">
+  </div>
+</div>
+
+<!-- ═══ MODAL ═══ -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modalTitle"></div>
+    <div class="modal-sub" id="modalSub"></div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<!-- ═══ TOAST ═══ -->
+<div id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════
+// Config & State
+// ══════════════════════════════════════════
+let STATE = {
+  username: '',
+  password: '',
+  serverUrl: '',
+  currentTab: 'calendar',
+  selectedDate: null,
+  activities: [],
+  watchlist: [],
+  selectedActivity: null,
+  selectedDate4Modal: null
+};
+
+const WEEKDAYS = ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
+
+const STATUS_MAP = {
+  0: { label: 'מלא', cls: 'full',       badge: 'badge-full' },
+  1: { label: 'המתנה', cls: 'waiting',  badge: 'badge-waiting' },
+  2: { label: 'רשום ✓', cls: 'registered', badge: 'badge-registered' },
+  3: { label: 'פתוח', cls: 'open',      badge: 'badge-open' },
+  4: { label: 'ברשימת המתנה', cls: 'waiting', badge: 'badge-waiting' },
+  5: { label: 'עומד להיסגר', cls: 'open', badge: 'badge-open' },
+  6: { label: 'טרם נפתח', cls: 'soon',  badge: 'badge-soon' },
+  7: { label: 'לא פתוח', cls: 'soon',   badge: 'badge-soon' },
+  8: { label: 'רשום ✓', cls: 'registered', badge: 'badge-registered' },
+  9: { label: 'יש תזכורת', cls: 'soon', badge: 'badge-soon' },
+  10: { label: 'ניתן להירשם', cls: 'open', badge: 'badge-open' }
+};
+
+// ══════════════════════════════════════════
+// Init
+// ══════════════════════════════════════════
+window.onload = () => {
+  const saved = localStorage.getItem('fizikalSession');
+  if (saved) {
+    try {
+      const s = JSON.parse(saved);
+      STATE.username  = s.username;
+      STATE.password  = s.password;
+      STATE.serverUrl = s.serverUrl;
+      showApp();
+    } catch(e) {}
+  }
+
+  // Restore server URL in input
+  const savedUrl = localStorage.getItem('fizikalServerUrl');
+  if (savedUrl) document.getElementById('serverUrl').value = savedUrl;
+};
+
+// ══════════════════════════════════════════
+// Auth
+// ══════════════════════════════════════════
+async function doLogin() {
+  const username  = document.getElementById('username').value.trim();
+  const password  = document.getElementById('password').value;
+  const serverUrl = document.getElementById('serverUrl').value.trim();
+
+  if (!username || !password) { showError('loginError', 'נא למלא שם משתמש וסיסמה'); return; }
+  if (!serverUrl) { showError('loginError', 'נא להזין את כתובת השרת'); return; }
+
+  const btn = document.getElementById('loginBtn');
+  btn.classList.add('loading');
+  btn.textContent = 'מתחבר...';
+  hideError('loginError');
+
+  const res = await apiCall({ action: 'login', username, password }, serverUrl);
+
+  if (res && res.success) {
+    STATE.username  = username;
+    STATE.password  = password;
+    STATE.serverUrl = serverUrl;
+    localStorage.setItem('fizikalSession', JSON.stringify({ username, password, serverUrl }));
+    localStorage.setItem('fizikalServerUrl', serverUrl);
+    showApp();
+  } else {
+    showError('loginError', (res && res.error) || 'שגיאת התחברות - בדוק פרטים ו-URL');
+    btn.classList.remove('loading');
+    btn.textContent = 'כניסה';
+  }
+}
+
+function doLogout() {
+  localStorage.removeItem('fizikalSession');
+  STATE = { ...STATE, username:'', password:'', currentTab:'calendar' };
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+}
+
+// ══════════════════════════════════════════
+// App Shell
+// ══════════════════════════════════════════
+function showApp() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  document.getElementById('headerUser').textContent = STATE.username;
+  STATE.selectedDate = new Date();
+  switchTab('calendar');
+}
+
+function switchTab(tab) {
+  STATE.currentTab = tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(`tab-${tab}`).classList.add('active');
+  if (tab === 'calendar') renderCalendarTab();
+  else renderWatchlistTab();
+}
+
+// ══════════════════════════════════════════
+// Calendar Tab
+// ══════════════════════════════════════════
+function renderCalendarTab() {
+  const content = document.getElementById('appContent');
+  content.innerHTML = buildDateStrip() + '<div id="classList"></div>';
+  loadClasses(STATE.selectedDate);
+}
+
+function buildDateStrip() {
+  const today = new Date();
+  let html = '<div class="date-strip">';
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() + i);
+    const dayName = WEEKDAYS[d.getDay()];
+    const dayNum  = d.getDate();
+    const isActive = isSameDay(d, STATE.selectedDate);
+    html += `<div class="date-pill ${isActive ? 'active' : ''}" onclick="selectDate(${d.getTime()})">
+      <div class="day-name">${dayName}</div>
+      <div class="day-num">${dayNum}</div>
+    </div>`;
+  }
+  html += '</div>';
+  return html;
+}
+
+function selectDate(ts) {
+  STATE.selectedDate = new Date(ts);
+  renderCalendarTab();
+}
+
+async function loadClasses(date) {
+  const list = document.getElementById('classList');
+  list.innerHTML = '<div class="spinner"></div>';
+
+  const dateStr = formatDate(date);
+  const res = await apiCall({
+    action: 'getCalendar',
+    username: STATE.username,
+    password: STATE.password,
+    startDate: dateStr,
+    endDate: dateStr
+  });
+
+  if (!res || !res.success) {
+    list.innerHTML = `<div class="error-msg">${(res && res.error) || 'שגיאה בטעינת שיעורים'}</div>`;
+    return;
+  }
+
+  STATE.activities = res.activities || [];
+  renderClassList(STATE.activities, date);
+}
+
+function renderClassList(activities, date) {
+  const list = document.getElementById('classList');
+
+  if (!activities.length) {
+    list.innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--muted)">אין שיעורים ביום זה</div>';
+    return;
+  }
+
+  // Sort by time
+  activities.sort((a, b) => (a.StartHour || '').localeCompare(b.StartHour || ''));
+
+  const dateStr = formatDate(date);
+  let html = '<div class="classes-list">';
+
+  activities.forEach((a, idx) => {
+    const s = STATUS_MAP[a.Status] || STATUS_MAP[6];
+    const canRegister = [3,5,10].includes(a.Status);
+    const isRegistered = [2,8].includes(a.Status);
+    const isFull = a.Status === 0;
+    const notOpen = [6,7].includes(a.Status);
+    const canWaitlist = a.Status === 1;
+
+    const capacity = a.MaxCapacity || 0;
+    const registered = a.RegisteredCount || 0;
+    const fillPct = capacity ? Math.round((registered / capacity) * 100) : 0;
+    const fillCls = fillPct < 60 ? 'fill-low' : fillPct < 85 ? 'fill-mid' : 'fill-high';
+
+    const timeStr = (a.StartHour || '').substring(0,5);
+    const endStr  = (a.EndHour   || '').substring(0,5);
+
+    html += `<div class="class-card status-${s.cls}">
+      <div class="card-top">
+        <div class="class-name">${a.Name || 'שיעור'}</div>
+        <div class="status-badge ${s.badge}">${s.label}</div>
+      </div>
+      <div class="card-meta">
+        <div class="meta-item">⏰ ${timeStr}–${endStr}</div>
+        ${a.EmployeeName ? `<div class="meta-item">👤 ${a.EmployeeName}</div>` : ''}
+        ${capacity ? `<div class="meta-item">👥 ${registered}/${capacity}</div>` : ''}
+      </div>
+      ${capacity ? `<div class="capacity-bar"><div class="capacity-fill ${fillCls}" style="width:${fillPct}%"></div></div>` : ''}
+      <div class="card-actions">
+        ${canRegister
+          ? `<button class="btn-register" onclick="startRegister(${idx},'${dateStr}')">הירשם עכשיו</button>`
+          : isRegistered
+          ? `<button class="btn-register" disabled>רשום ✓</button>`
+          : canWaitlist
+          ? `<button class="btn-register" onclick="startRegister(${idx},'${dateStr}')">הירשם להמתנה</button>`
+          : notOpen
+          ? `<button class="btn-register" disabled>טרם נפתח</button>`
+          : `<button class="btn-register" disabled>${s.label}</button>`
+        }
+        ${notOpen || (isFull && !canWaitlist)
+          ? `<button class="btn-watch" onclick="openWatchModal(${idx},'${dateStr}')" title="הוסף לרשימה">🔔</button>`
+          : ''
+        }
+      </div>
+    </div>`;
+  });
+
+  html += '</div>';
+  list.innerHTML = html;
+}
+
+// ══════════════════════════════════════════
+// Register Flow
+// ══════════════════════════════════════════
+function startRegister(actIdx, dateStr) {
+  const activity = STATE.activities[actIdx];
+  STATE.selectedActivity = activity;
+  STATE.selectedDate4Modal = dateStr;
+
+  openModal(
+    `הרשמה ל${activity.Name}`,
+    `${dateStr} • ${(activity.StartHour||'').substring(0,5)}`,
+    buildRegisterOptions()
+  );
+}
+
+function buildRegisterOptions() {
+  return `
+    <div class="modal-option selected" id="opt-once" onclick="selectOpt('once')">
+      <div>
+        <div class="option-label">רישום חד-פעמי</div>
+        <div class="option-sub">נרשם לשיעור הזה בלבד</div>
+      </div>
+      <div class="checkmark" id="check-once">✓</div>
+    </div>
+    <div class="modal-option" id="opt-recurring" onclick="selectOpt('recurring')">
+      <div>
+        <div class="option-label">רישום שבועי קבוע 🔁</div>
+        <div class="option-sub">ינסה להירשם אוטומטית כל שבוע</div>
+      </div>
+      <div class="checkmark" id="check-recurring"></div>
+    </div>
+    <button class="btn-confirm" onclick="confirmRegister()">אשר רישום</button>
+  `;
+}
+
+let selectedOpt = 'once';
+
+function selectOpt(opt) {
+  selectedOpt = opt;
+  ['once','recurring'].forEach(o => {
+    const el = document.getElementById(`opt-${o}`);
+    const ch = document.getElementById(`check-${o}`);
+    if (o === opt) { el.classList.add('selected'); ch.textContent = '✓'; }
+    else           { el.classList.remove('selected'); ch.textContent = ''; }
+  });
+}
+
+async function confirmRegister() {
+  const activity = STATE.selectedActivity;
+  const dateStr  = STATE.selectedDate4Modal;
+  closeModal();
+
+  showToast('מבצע רישום...');
+
+  const res = await apiCall({
+    action: 'register',
+    username: STATE.username,
+    password: STATE.password,
+    activity,
+    date: dateStr
+  });
+
+  if (res && res.success) {
+    showToast('✅ נרשמת בהצלחה!');
+    // If recurring - add to watchlist too
+    if (selectedOpt === 'recurring') {
+      await addToWatchlist(activity, true);
+      showToast('✅ נרשמת + נוסף לרישום שבועי!');
+    }
+    loadClasses(STATE.selectedDate);
+  } else {
+    showToast('❌ ' + ((res && res.error) || 'הרישום נכשל'));
+  }
+}
+
+// ══════════════════════════════════════════
+// Watch Modal (for not-yet-open classes)
+// ══════════════════════════════════════════
+function openWatchModal(actIdx, dateStr) {
+  const activity = STATE.activities[actIdx];
+  STATE.selectedActivity = activity;
+  STATE.selectedDate4Modal = dateStr;
+
+  openModal(
+    `הוסף לרשימת רישום`,
+    `${activity.Name} • ${(activity.StartHour||'').substring(0,5)}`,
+    `<div class="modal-option selected" id="opt-once" onclick="selectOpt('once')">
+      <div>
+        <div class="option-label">רישום חד-פעמי</div>
+        <div class="option-sub">ינסה להירשם כשייפתח הרישום</div>
+      </div>
+      <div class="checkmark" id="check-once">✓</div>
+    </div>
+    <div class="modal-option" id="opt-recurring" onclick="selectOpt('recurring')">
+      <div>
+        <div class="option-label">רישום שבועי קבוע 🔁</div>
+        <div class="option-sub">ינסה להירשם כל שבוע אוטומטית</div>
+      </div>
+      <div class="checkmark" id="check-recurring"></div>
+    </div>
+    <button class="btn-confirm" onclick="confirmWatch()">הוסף לרשימה</button>`
+  );
+}
+
+async function confirmWatch() {
+  const activity = STATE.selectedActivity;
+  closeModal();
+
+  const recurring = selectedOpt === 'recurring';
+  await addToWatchlist(activity, recurring);
+  showToast(recurring ? '🔔 נוסף לרישום שבועי!' : '🔔 נוסף לרשימת הרישום!');
+}
+
+async function addToWatchlist(activity, recurring) {
+  const weekdayNum = new Date().getDay(); // approximate; scheduler uses weekday name
+  const weekdayName = WEEKDAYS[weekdayNum];
+
+  // Parse weekday from activity date if available
+  const timeStr = (activity.StartHour || '').substring(0,5);
+
+  await apiCall({
+    action: 'addToWatchlist',
+    username: STATE.username,
+    classInfo: {
+      className: activity.Name,
+      weekday: weekdayName,
+      time: timeStr,
+      recurring
+    }
+  });
+}
+
+// ══════════════════════════════════════════
+// Watchlist Tab
+// ══════════════════════════════════════════
+async function renderWatchlistTab() {
+  const content = document.getElementById('appContent');
+  content.innerHTML = '<div class="spinner"></div>';
+
+  const res = await apiCall({ action: 'getWatchlist', username: STATE.username });
+
+  if (!res || !res.success) {
+    content.innerHTML = '<div class="error-msg">שגיאה בטעינת הרשימה</div>';
+    return;
+  }
+
+  STATE.watchlist = res.watchlist || [];
+
+  if (!STATE.watchlist.length) {
+    content.innerHTML = `<div class="watchlist-empty">
+      <div class="empty-icon">🔔</div>
+      <p>אין שיעורים ברשימה שלך.<br>לחץ על 🔔 ליד שיעור בלוח כדי להוסיף.</p>
+    </div>`;
+    return;
+  }
+
+  let html = '<div class="section-title">רישום אוטומטי פעיל</div>';
+  STATE.watchlist.forEach(item => {
+    html += `<div class="watch-item">
+      <div class="watch-info">
+        <div class="watch-name">
+          ${item.recurring ? '<span class="recurring-badge">שבועי 🔁</span>' : ''}
+          ${item.className}
+        </div>
+        <div class="watch-meta">${item.weekday} • ${item.time}</div>
+        ${item.lastResult ? `<div class="watch-result">${item.lastResult}</div>` : ''}
+      </div>
+      <button class="btn-remove" onclick="removeWatch(${item.rowIndex})">✕</button>
+    </div>`;
+  });
+
+  content.innerHTML = html;
+}
+
+async function removeWatch(rowIndex) {
+  const res = await apiCall({
+    action: 'removeFromWatchlist',
+    username: STATE.username,
+    rowIndex
+  });
+  if (res && res.success) {
+    showToast('הוסר מהרשימה');
+    renderWatchlistTab();
+  }
+}
+
+// ══════════════════════════════════════════
+// Modal
+// ══════════════════════════════════════════
+function openModal(title, sub, body) {
+  selectedOpt = 'once';
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalSub').textContent   = sub;
+  document.getElementById('modalBody').innerHTML    = body;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modalOverlay')) return;
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+// ══════════════════════════════════════════
+// Toast
+// ══════════════════════════════════════════
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ══════════════════════════════════════════
+// API
+// ══════════════════════════════════════════
+async function apiCall(body, overrideUrl) {
+  const url = overrideUrl || STATE.serverUrl;
+  if (!url) return { success: false, error: 'אין כתובת שרת' };
+
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    return await res.json();
+  } catch(e) {
+    console.error('API error:', e);
+    return { success: false, error: e.message };
+  }
+}
+
+// ══════════════════════════════════════════
+// Utils
+// ══════════════════════════════════════════
+function formatDate(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const day = String(d.getDate()).padStart(2,'0');
+  return `${y}/${m}/${day}`;
+}
+
+function isSameDay(a, b) {
+  return a.getFullYear()===b.getFullYear() &&
+         a.getMonth()===b.getMonth() &&
+         a.getDate()===b.getDate();
+}
+
+function showError(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function hideError(id) {
+  document.getElementById(id).style.display = 'none';
+}
+</script>
+
+</body>
+</html>
